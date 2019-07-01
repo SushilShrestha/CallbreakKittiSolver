@@ -52,6 +52,7 @@ if __name__ == '__main__':
     print_cards(my_cards)
     print
     map(print_cards, best_combination)
+    print("test lint error")
 
     print "\n--- %s seconds ---" % (time.time() - START_TIME)
 
