@@ -121,13 +121,12 @@ def calculate_point(sorted_three_card_seq):
         elif is_a_judh(sorted_three_card_seq):
             # print 'double'
             return judh_point(sorted_three_card_seq)
-        else:
-            # print 'power'
-            return power_point(sorted_three_card_seq)
-    except Exception, e:
-        from Cards import print_cards
+        # print 'power'
+        return power_point(sorted_three_card_seq)
+    except Exception, exc:
+        from cards import print_cards
         print_cards(sorted_three_card_seq)
-        raise e
+        raise exc
 
 
 def is_trail(triplet):
@@ -142,9 +141,11 @@ def is_a_double_run(triplet):
 
 
 def is_a_run(sorted_triplet):
-    if sorted_triplet[0].number == 1 and sorted_triplet[1].number == 12 and sorted_triplet[2].number == 13:
+    if sorted_triplet[0].number == 1 and sorted_triplet[1].number == 12 \
+            and sorted_triplet[2].number == 13:
         return True
-    return (sorted_triplet[0].number + 2 == sorted_triplet[1].number + 1 == sorted_triplet[2].number)
+    return sorted_triplet[0].number + 2 == sorted_triplet[1].number + 1 == \
+           sorted_triplet[2].number
 
 
 def is_of_same_color(triplet):
@@ -161,15 +162,14 @@ def is_a_judh(triplet):
     )
 
 
-def trail_points(triplet, position=1):
+def trail_points(triplet):
     point = POINTS_TABLE['TRAIL'][triplet[0].number]
     return point
 
 
-def double_run_point(triplet, position=1):
+def double_run_point(triplet):
     min_card = min(triplet, key=lambda x: x.number)
     if min_card == 1:
-        max_card = max(triplet, key=lambda x: x.number)
         point = POINTS_TABLE['DOUBLE_RUNS'][12]
         return point
 
@@ -177,10 +177,9 @@ def double_run_point(triplet, position=1):
     return point
 
 
-def run_point(triplet, position=1):
+def run_point(triplet):
     min_card = min(triplet, key=lambda x: x.number)
     if min_card == 1:
-        max_card = max(triplet, key=lambda x: x.number)
         point = POINTS_TABLE['RUNS'][12]
         return point
 
@@ -188,7 +187,7 @@ def run_point(triplet, position=1):
     return point
 
 
-def color_point(triplet, position=1):
+def color_point(triplet):
     min_card = triplet[0]
     if min_card.number == 1:
         points = POINTS_TABLE['COLOR'][1] + get_extra_power_point(*triplet[1:])
@@ -199,27 +198,27 @@ def color_point(triplet, position=1):
     return points
 
 
-def judh_point(triplet, position=1):
+def judh_point(triplet):
     judh_card = None
-    nonJudh_card = None
+    non_judh_card = None
 
-    if (triplet[0].has_same_number(triplet[1])):
+    if triplet[0].has_same_number(triplet[1]):
         judh_card = triplet[0]
-        nonJudh_card = triplet[2]
-    elif (triplet[0].has_same_number(triplet[2])):
+        non_judh_card = triplet[2]
+    elif triplet[0].has_same_number(triplet[2]):
         judh_card = triplet[0]
-        nonJudh_card = triplet[1]
+        non_judh_card = triplet[1]
     else:
         judh_card = triplet[1]
-        nonJudh_card = triplet[0]
+        non_judh_card = triplet[0]
 
-    point = POINTS_TABLE['JUDH'][judh_card.number] + get_extra_power_point(nonJudh_card)
+    point = POINTS_TABLE['JUDH'][judh_card.number] + get_extra_power_point(non_judh_card)
     return point
 
 
-def power_point(triplet, position=1):
+def power_point(triplet):
     min_card = triplet[0]
-    if (min_card.number == 1):
+    if min_card.number == 1:
         return POINTS_TABLE['POWER'][1] + get_extra_power_point(*triplet[1:])
 
     return POINTS_TABLE['POWER'][triplet[2].number] + get_extra_power_point(*triplet[:2])
@@ -227,13 +226,13 @@ def power_point(triplet, position=1):
 
 def get_extra_power_point(*args):
     divider = 13 * len(args)
-    points = map(lambda x: POINTS_TABLE['POWER'][x.number], args)
+    points = [POINTS_TABLE['POWER'][x.number] for x in args]
     total_point = reduce(lambda x, y: x + y, points, 0)
-    return  float(total_point) / divider
+    return float(total_point) / divider
 
 
 if __name__ == '__main__':
-    from Cards import Card
+    from cards import Card
 
     c_aaa = [Card(1, 'hearts'), Card(1, 'diamonds'), Card(1, 'clubs')]
     c_kkk = [Card(13, 'hearts'), Card(13, 'diamonds'), Card(13, 'clubs')]

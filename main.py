@@ -1,23 +1,25 @@
-import time
-start_time = time.time()
-
-from operator import add
 from itertools import combinations
-from Cards import get_shuffled_cards, print_cards
-from Points import calculate_point
+import time
 
-def get_possible_combinations(cards):
-    if len(cards) < 3:
+from cards import get_shuffled_cards, print_cards
+from points import calculate_point
+
+START_TIME = time.time()
+
+
+def get_possible_combinations(cards_input):
+    if len(cards_input) < 3:
         return [[]]
 
     big_basket = []
 
-    possible_card_seqs = combinations(cards, 3)
+    possible_card_seqs = combinations(cards_input, 3)
 
     for card_seq in possible_card_seqs:
         card_seq = sorted(card_seq, key=lambda x: x.number)
         used_cards_uuids = [x.uuid for x in card_seq]
-        remaining_cards = filter(lambda x: x.uuid not in used_cards_uuids, cards)
+        remaining_cards = [item for item in cards_input if item.uuid not in used_cards_uuids]
+        # remaining_cards = filter(lambda x: x.uuid not in used_cards_uuids, cards_input)
 
         remaining_cards_combination = get_possible_combinations(remaining_cards)
 
@@ -35,7 +37,7 @@ if __name__ == '__main__':
     possible_combinations = get_possible_combinations(my_cards)
 
     print 'Combinations Ready!! ' + str(len(possible_combinations)) + " Possible combinations"
-    print("\n--- %s seconds ---" % (time.time() - start_time))
+    print "\n--- %s seconds ---" % (time.time() - START_TIME)
     print 'Now Calculating Best Possible Combinations...'
 
     highest_point = 0
@@ -46,12 +48,12 @@ if __name__ == '__main__':
             highest_point = points
             best_combination = card_combination
 
-    best_combination = sorted(best_combination, key=lambda x: calculate_point(x), reverse=True)
+    best_combination = sorted(best_combination, key=calculate_point, reverse=True)
     print_cards(my_cards)
     print
     map(print_cards, best_combination)
 
-    print("\n--- %s seconds ---" % (time.time() - start_time))
+    print "\n--- %s seconds ---" % (time.time() - START_TIME)
 
 
 
