@@ -70,4 +70,4 @@ def get_shuffled_cards():
 if __name__ == '__main__':
     print get_shuffled_cards()
     #print_cards(get_shuffled_cards()[:13])
-    print("test ")
+
