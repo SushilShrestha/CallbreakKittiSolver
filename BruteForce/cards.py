@@ -18,6 +18,20 @@ class Card(object):
 
         self.card_str = self.str_rep()
 
+    def __gt__(self, other):
+        return self.number > other.number
+    def __ge__(self, other):
+        return self.number >= other.number
+    def __lt__(self, other):
+        return self.number < other.number
+    def __le__(self, other):
+        return self.number <= other.number
+    def __eq__(self, other):
+        return self.number == other.number and self.suit == other.suit
+
+    def __hash__(self):
+        return hash(self.str_rep())
+
     def has_same_number(self, card):
         return self.number == card.number
 
@@ -36,7 +50,8 @@ class Card(object):
         return '{} of {}'.format(card, self.suit)
 
     def __str__(self):
-        return self.card_str
+        return self.__unicode__()
+        # return self.card_str
 
     def __unicode__(self):
         card = self.number
@@ -52,21 +67,33 @@ class Card(object):
         return str(card) + SUITS_CODE[self.suit]
 
 
-def print_cards(cards):
-    print '[',
+cards_map = {u'A♠':u'🂡', u'2♠':u'🂢', u'3♠':u'🂣', u'4♠':u'🂤', u'5♠':u'🂥', u'6♠':u'🂦', u'7♠':u'🂧', u'8♠':u'🂨', u'9♠':u'🂩', u'10♠':u'🂪', u'J♠':u'🂫', u'Q♠':u'🂭', u'K♠':u'🂮',
+u'A♡':u'🂱', u'2♡':u'🂲', u'3♡':u'🂳', u'4♡':u'🂴', u'5♡':u'🂵', u'6♡':u'🂶', u'7♡':u'🂷', u'8♡':u'🂸', u'9♡':u'🂹', u'10♡':u'🂺', u'J♡':u'🂻', u'Q♡':u'🂽', u'K♡':u'🂾',
+u'A♢':u'🃁', u'2♢':u'🃂', u'3♢':u'🃃', u'4♢':u'🃄', u'5♢':u'🃅', u'6♢':u'🃆', u'7♢':u'🃇', u'8♢':u'🃈', u'9♢':u'🃉', u'10♢':u'🃊', u'J♢':u'🃋', u'Q♢':u'🃍', u'K♢':u'🃎',
+u'A♣':u'🃑', u'2♣':u'🃒', u'3♣':u'🃓', u'4♣':u'🃔', u'5♣':u'🃕', u'6♣':u'🃖', u'7♣':u'🃗', u'8♣':u'🃘', u'9♣':u'🃙', u'10♣':u'🃚', u'J♣':u'🃛', u'Q♣':u'🃝', u'K♣':u'🃞'}
+
+def print_cards(cards, deck_card=False):
+    print ('[', end=" ")
     for card in cards:
-        print unicode(card),
-    print ']',
+        print(card, end=" ")
+        # print (card, " ", cards_map[str(card)], end=" ")
+    print (']')
 
 
 def get_shuffled_cards():
     card_bucket = []
-    for number in xrange(1, 14):
+    for number in range(1, 14):
         for suit in SUITS:
             card_bucket.append(Card(number, suit))
     return random.sample(card_bucket, len(card_bucket))
 
 
 if __name__ == '__main__':
-    print get_shuffled_cards()
+    print (get_shuffled_cards())
+    assert Card(1, 'hearts') == Card(1, 'hearts')
+    assert Card(1, 'hearts') != Card(1, 'clubs')
+    assert Card(1, 'hearts') >= Card(1, 'clubs')
+    assert Card(1, 'hearts') <= Card(1, 'clubs')
+    assert Card(1, 'hearts') in [Card(1, 'hearts'), Card(1, 'clubs')]
     #print_cards(get_shuffled_cards()[:13])
+
