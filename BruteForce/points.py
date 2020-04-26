@@ -1,3 +1,7 @@
+from functools import reduce
+
+from .cards import print_cards
+
 POINTS_TABLE = {
     'POWER': {
         2: 1,
@@ -123,10 +127,9 @@ def calculate_point(sorted_three_card_seq):
             return judh_point(sorted_three_card_seq)
         # print 'power'
         return power_point(sorted_three_card_seq)
-    except Exception, exc:
-        from cards import print_cards
+    except Exception:
         print_cards(sorted_three_card_seq)
-        raise exc
+        raise Exception("error!!")
 
 
 def is_trail(triplet):
@@ -169,7 +172,7 @@ def trail_points(triplet):
 
 def double_run_point(triplet):
     min_card = min(triplet, key=lambda x: x.number)
-    if min_card == 1:
+    if min_card.number == 1:
         point = POINTS_TABLE['DOUBLE_RUNS'][12]
         return point
 
@@ -179,7 +182,7 @@ def double_run_point(triplet):
 
 def run_point(triplet):
     min_card = min(triplet, key=lambda x: x.number)
-    if min_card == 1:
+    if min_card.number == 1:
         point = POINTS_TABLE['RUNS'][12]
         return point
 
@@ -253,21 +256,21 @@ if __name__ == '__main__':
     c_j68 = [Card(11, 'hearts'), Card(6, 'diamonds'), Card(8, 'clubs')]
     c_235 = [Card(2, 'hearts'), Card(3, 'diamonds'), Card(5, 'clubs')]
 
-    print calculate_point(sorted(c_aaa, key=lambda x: x.number))
-    print calculate_point(sorted(c_kkk, key=lambda x: x.number))
-    print calculate_point(sorted(c_222, key=lambda x: x.number))
-    print calculate_point(sorted(c_akq_dr, key=lambda x: x.number))
-    print calculate_point(sorted(c_910j_dr, key=lambda x: x.number))
-    print calculate_point(sorted(c_234_dr, key=lambda x: x.number))
-    print calculate_point(sorted(c_akq, key=lambda x: x.number))
-    print calculate_point(sorted(c_8910, key=lambda x: x.number))
-    print calculate_point(sorted(c_234, key=lambda x: x.number))
-    print calculate_point(sorted(c_akj_clr, key=lambda x: x.number))
-    print calculate_point(sorted(c_7j9_clr, key=lambda x: x.number))
-    print calculate_point(sorted(c_235_clr, key=lambda x: x.number))
-    print calculate_point(sorted(c_aak, key=lambda x: x.number))
-    print calculate_point(sorted(c_k55, key=lambda x: x.number))
-    print calculate_point(sorted(c_223, key=lambda x: x.number))
-    print calculate_point(sorted(c_akj, key=lambda x: x.number))
-    print calculate_point(sorted(c_j68, key=lambda x: x.number))
-    print calculate_point(sorted(c_235, key=lambda x: x.number))
+    print (calculate_point(sorted(c_aaa, key=lambda x: x.number)))
+    print (calculate_point(sorted(c_kkk, key=lambda x: x.number)))
+    print (calculate_point(sorted(c_222, key=lambda x: x.number)))
+    print (calculate_point(sorted(c_akq_dr, key=lambda x: x.number)))
+    print (calculate_point(sorted(c_910j_dr, key=lambda x: x.number)))
+    print (calculate_point(sorted(c_234_dr, key=lambda x: x.number)))
+    print (calculate_point(sorted(c_akq, key=lambda x: x.number)))
+    print (calculate_point(sorted(c_8910, key=lambda x: x.number)))
+    print (calculate_point(sorted(c_234, key=lambda x: x.number)))
+    print (calculate_point(sorted(c_akj_clr, key=lambda x: x.number)))
+    print (calculate_point(sorted(c_7j9_clr, key=lambda x: x.number)))
+    print (calculate_point(sorted(c_235_clr, key=lambda x: x.number)))
+    print (calculate_point(sorted(c_aak, key=lambda x: x.number)))
+    print (calculate_point(sorted(c_k55, key=lambda x: x.number)))
+    print (calculate_point(sorted(c_223, key=lambda x: x.number)))
+    print (calculate_point(sorted(c_akj, key=lambda x: x.number)))
+    print (calculate_point(sorted(c_j68, key=lambda x: x.number)))
+    print (calculate_point(sorted(c_235, key=lambda x: x.number)))
