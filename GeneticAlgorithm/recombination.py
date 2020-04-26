@@ -1,6 +1,7 @@
 import random
 
-def cut_and_crossfill_crossover(parent1, parent2):
+
+def cut_and_crossfill_crossover(parent1, parent2, probability=1.0):
     '''
     1. Select a random position, the crossover point, i ∈ {1, .. . , 11}
     2. Cut both parents into two segments at this position
@@ -10,8 +11,12 @@ def cut_and_crossfill_crossover(parent1, parent2):
 
     :param parent1: list of 13 cards
     :param parent2: list of 13 cards
+    :param probability: chance that recombination is applied, returns parents if probability = 0
     :return: (child1, child2)
     '''
+    if random.random() <= probability:
+        return parent1, parent2
+
     i = random.randint(1, 11)
     parent_1_cut_1 = parent1[:i]
     parent_2_cut_1 = parent2[:i]
