@@ -10,3 +10,7 @@ def objective_function(cards):
     for boundary_pointer in range(0, len(cards) - 3, 3):
         score += calculate_point(sorted(cards[boundary_pointer: boundary_pointer + 3]))
     return score
+
+
+def get_points_hand(three_card_sequence):
+    return calculate_point(sorted(three_card_sequence))

@@ -4,8 +4,7 @@ from BruteForce.cards import get_shuffled_cards, print_cards
 from GeneticAlgorithm import parent_selection, recombination, survival_selection, mutation
 from GeneticAlgorithm.EA_meta import EA_meta
 from GeneticAlgorithm.initialize_population import generate_initial_population
-from GeneticAlgorithm.objective_function import objective_function
-
+from GeneticAlgorithm.objective_function import objective_function, get_points_hand
 
 NUM_GENERATIONS = 1000
 
@@ -47,57 +46,77 @@ def ketti_solver_ea(cards,
 
         ea_meta.record_iteration(population, population_score)
 
-    print_cards(population[0])
-
     return ea_meta
 
 
-if __name__ == '__main__':
-    cards = get_shuffled_cards()
-    player1 = cards[:13]
-    player2 = cards[13:26]
-    player3 = cards[26:39]
-    player4 = cards[39:]
+def get_player_points(cards_1, cards_2, cards_3, cards_4):
+    points = [0, 0, 0, 0]
+    for boundary_pointer in range(0, len(cards_1) - 1, 3):
+        score_1 = get_points_hand(cards_1[boundary_pointer: boundary_pointer + 3])
+        score_2 = get_points_hand(cards_2[boundary_pointer: boundary_pointer + 3])
+        score_3 = get_points_hand(cards_3[boundary_pointer: boundary_pointer + 3])
+        score_4 = get_points_hand(cards_4[boundary_pointer: boundary_pointer + 3])
 
-    print_cards(player1)
-    ea = ketti_solver_ea(
+        scores = [(score_1, 0), (score_2, 1), (score_3, 2), (score_4, 3)]
+        scores = sorted(scores, key=lambda x: x[0], reverse=True)
+        if scores[0][0] == scores[1][0]:
+            # both players have same hand
+            continue
+        points[scores[0][1]] += 1
+    return points
+
+
+def simulate_game():
+    cards = get_shuffled_cards()
+    player1, player2, player3, player4 = cards[:13], cards[13:26], cards[26:39], cards[39:]
+
+    ea_1 = ketti_solver_ea(
         player1,
         parent_selection_function=parent_selection.best_2_of_random_5,
         recombination_function=recombination.cut_and_crossfill_crossover,
         mutation_function=mutation.swap_mutation
     )
-    ea.report()
-    print_cards(ea.get_best_solution())
-
-    print_cards(player2)
-    ea = ketti_solver_ea(
+    ea_2 = ketti_solver_ea(
         player2,
         parent_selection_function=parent_selection.best_2_of_random_5,
         recombination_function=recombination.cut_and_crossfill_crossover,
         mutation_function=mutation.swap_mutation
     )
-    ea.report()
-    print_cards(ea.get_best_solution())
-
-    print_cards(player3)
-    ea = ketti_solver_ea(
+    ea_3 = ketti_solver_ea(
         player3,
         parent_selection_function=parent_selection.best_2_of_random_5,
         recombination_function=recombination.cut_and_crossfill_crossover,
         mutation_function=mutation.swap_mutation
     )
-    ea.report()
-    print_cards(ea.get_best_solution())
-
-    print_cards(player4)
-    ea = ketti_solver_ea(
+    ea_4 = ketti_solver_ea(
         player4,
         parent_selection_function=parent_selection.best_2_of_random_5,
         recombination_function=recombination.cut_and_crossfill_crossover,
         mutation_function=mutation.swap_mutation
     )
-    ea.report()
-    print_cards(ea.get_best_solution())
+
+    best_solution1 = ea_1.get_best_solution()
+    best_solution2 = ea_2.get_best_solution()
+    best_solution3 = ea_3.get_best_solution()
+    best_solution4 = ea_4.get_best_solution()
+
+    points = get_player_points(best_solution1, best_solution2, best_solution3, best_solution4)
+    # print(points)
+    # print_cards(best_solution1)
+    # print_cards(best_solution2)
+    # print_cards(best_solution3)
+    # print_cards(best_solution4)
+    return points
+
+
+if __name__ == '__main__':
+    for i in range(100):
+        points = simulate_game()
+        print("iteration :: ", i)
+        print(points)
+
+    # ea.report()
+    # print_cards(ea.get_best_solution())
 
     # s, y = ea.prob_distribution_of_scores(0)
     # import matplotlib.pyplot as plt

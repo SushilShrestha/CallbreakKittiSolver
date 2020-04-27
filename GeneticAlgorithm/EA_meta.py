@@ -5,7 +5,7 @@ import numpy as np
 import scipy.stats as stats
 import matplotlib.pyplot as plt
 
-from BruteForce.points import calculate_point
+from GeneticAlgorithm.objective_function import get_points_hand
 
 
 class EA_meta(object):
@@ -22,7 +22,7 @@ class EA_meta(object):
     def sort_cards_wrt_hands_score(self, cards):
         scoremap = []
         for boundary_pointer in range(0, len(cards) - 3, 3):
-            score = calculate_point(sorted(cards[boundary_pointer: boundary_pointer + 3]))
+            score = get_points_hand(cards[boundary_pointer: boundary_pointer + 3])
             scoremap.append((boundary_pointer, score))
 
         scoremap = sorted(scoremap, key=lambda x: x[1], reverse=True)
