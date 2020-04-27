@@ -1,3 +1,4 @@
+import copy
 import random
 
 
@@ -15,7 +16,7 @@ def cut_and_crossfill_crossover(parent1, parent2, probability=1.0):
     :return: (child1, child2)
     '''
     if random.random() <= probability:
-        return parent1, parent2
+        return copy.deepcopy(parent1), copy.deepcopy(parent2)
 
     i = random.randint(1, 11)
     parent_1_cut_1 = parent1[:i]
