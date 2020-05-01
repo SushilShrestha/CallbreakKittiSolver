@@ -10,6 +10,7 @@ NUM_GENERATIONS = 1000
 
 
 def ketti_solver_ea(cards,
+                    objective_function,
                     parent_selection_function,
                     recombination_function,
                     mutation_function
@@ -72,24 +73,28 @@ def simulate_game():
 
     ea_1 = ketti_solver_ea(
         player1,
+        objective_function=objective_function,
         parent_selection_function=parent_selection.best_2_of_random_5,
         recombination_function=recombination.cut_and_crossfill_crossover,
         mutation_function=mutation.swap_mutation
     )
     ea_2 = ketti_solver_ea(
         player2,
+        objective_function=lambda x: objective_function(x, weights=[0.5, 1, 1, 0.5]),
         parent_selection_function=parent_selection.best_2_of_random_5,
         recombination_function=recombination.cut_and_crossfill_crossover,
         mutation_function=mutation.swap_mutation
     )
     ea_3 = ketti_solver_ea(
         player3,
+        objective_function=lambda x: objective_function(x, weights=[1, 1, 0.5, 0.5]),
         parent_selection_function=parent_selection.best_2_of_random_5,
         recombination_function=recombination.cut_and_crossfill_crossover,
         mutation_function=mutation.swap_mutation
     )
     ea_4 = ketti_solver_ea(
         player4,
+        objective_function=lambda x: objective_function(x, weights=[0.5, 0.5, 0.75, 1]),
         parent_selection_function=parent_selection.best_2_of_random_5,
         recombination_function=recombination.cut_and_crossfill_crossover,
         mutation_function=mutation.swap_mutation
@@ -99,7 +104,10 @@ def simulate_game():
     best_solution2 = ea_2.get_best_solution()
     best_solution3 = ea_3.get_best_solution()
     best_solution4 = ea_4.get_best_solution()
-
+    print_cards(best_solution1)
+    print_cards(best_solution2)
+    print_cards(best_solution3)
+    print_cards(best_solution4)
     points = get_player_points(best_solution1, best_solution2, best_solution3, best_solution4)
     # print(points)
     # print_cards(best_solution1)
